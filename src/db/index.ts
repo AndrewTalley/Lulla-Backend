@@ -1,23 +1,25 @@
 import { drizzle } from "drizzle-orm/node-postgres";
 import { Pool } from "pg";
 import * as schema from "./schema";
+import { initializeDatabase } from './init';
 
-if (!process.env.DATABASE_URL) {
-  throw new Error("DATABASE_URL environment variable is required");
+// Initialize database connection and run migrations
+let dbInstance: ReturnType<typeof drizzle>;
+let poolInstance: Pool;
+
+export async function getDatabase() {
+  if (!dbInstance || !poolInstance) {
+    const { db: initializedDb, pool: initializedPool } = await initializeDatabase();
+    dbInstance = initializedDb;
+    poolInstance = initializedPool;
+  }
+  return { db: dbInstance, pool: poolInstance };
 }
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  max: 20,
-  idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 2000,
-});
+// For backward compatibility, export a promise that resolves to the db
+export const dbPromise = getDatabase().then(({ db }) => db);
+export const poolPromise = getDatabase().then(({ pool }) => pool);
 
-pool.on('error', (err) => {
-  console.error('Unexpected error on idle client', err);
-  process.exit(-1);
-});
-
-export const db = drizzle(pool, { schema });
-
-export { pool };
+// Legacy exports (deprecated - use getDatabase() instead)
+export const db = dbPromise;
+export const pool = poolPromise;

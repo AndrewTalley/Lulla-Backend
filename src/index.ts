@@ -5,6 +5,7 @@ import "dotenv/config";
 
 import { authMiddleware } from "./middleware/auth";
 import type { Variables } from "./types";
+import { getDatabase } from "./db";
 
 import auth from "./routes/auth";
 import pdf from "./routes/pdf";
@@ -49,13 +50,26 @@ app.route("/schedule", schedule);
 app.route("/stripe", stripeRoutes);
 app.route("/stripe-webhook", stripeWebhook);
 
-// Start server
-const port = parseInt(process.env.PORT || "3000");
-serve({
-  fetch: app.fetch,
-  port,
-});
+// Initialize database and start server
+async function startServer() {
+  try {
+    console.log('🔄 Initializing database...');
+    await getDatabase();
+    console.log('✅ Database initialized successfully');
+    
+    const port = parseInt(process.env.PORT || "3000");
+    serve({
+      fetch: app.fetch,
+      port,
+    });
+    
+    console.log(`🚀 Server running on port ${port}`);
+  } catch (error) {
+    console.error('❌ Failed to start server:', error);
+    process.exit(1);
+  }
+}
 
-console.log(`🚀 Server running on port ${port}`);
+startServer();
 
 

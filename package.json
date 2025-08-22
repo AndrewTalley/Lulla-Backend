@@ -8,7 +8,12 @@
     "dev": "tsx watch src/index.ts",
     "start": "node dist/index.js",
     "build": "tsc && node scripts/fix-imports.js",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio",
+    "setup-db": "node scripts/setup-db.js"
   },
   "dependencies": {
     "@hono/node-server": "^1.16.0",
@@ -32,6 +37,7 @@
     "@types/better-sqlite3": "^7.6.13",
     "@types/nodemailer": "^6.4.17",
     "@types/pg": "^8.15.4",
+    "drizzle-kit": "^0.31.4",
     "tsc-alias": "^1.8.16",
     "tsc-esm": "^1.0.4",
     "tsx": "^4.19.2",

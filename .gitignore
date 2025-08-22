@@ -99,6 +99,9 @@ public
 # TernJS port file
 .tern-port
 
+# Drizzle migrations
+drizzle/
+
 # Stores VSCode versions used for testing VSCode extensions
 .vscode-test
 

@@ -67,7 +67,20 @@ npm install
 
 3. Set up your environment variables in `.env`
 
-4. Run database migrations (if using Drizzle migrations)
+4. Run database migrations:
+   ```bash
+   # Generate migration files from schema changes
+   npm run db:generate
+   
+   # Apply migrations to database
+   npm run db:migrate
+   
+   # Push schema changes directly (development only)
+   npm run db:push
+   
+   # Open Drizzle Studio to view/edit data
+   npm run db:studio
+   ```
 
 ## Development
 
