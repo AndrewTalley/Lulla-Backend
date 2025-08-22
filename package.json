@@ -25,7 +25,7 @@
     "pg": "^8.16.3",
     "stripe": "^18.3.0",
     "uuid": "^11.1.0",
-    "zod": "^4.0.5"
+    "zod": "^3.25.76"
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
@@ -38,7 +38,13 @@
   "engines": {
     "node": ">=18.0.0"
   },
-  "keywords": ["sleep", "schedule", "ai", "api", "backend"],
+  "keywords": [
+    "sleep",
+    "schedule",
+    "ai",
+    "api",
+    "backend"
+  ],
   "author": "",
   "license": "MIT"
 }
