@@ -1,5 +1,5 @@
 import { readdir, readFile, writeFile, stat } from 'fs/promises';
-import { join, extname } from 'path';
+import { join, extname, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -43,9 +43,21 @@ async function fixFileImports(filePath) {
     for (let i = importsToFix.length - 1; i >= 0; i--) {
       const { fullMatch, prefix, importPath, suffix, index } = importsToFix[i];
       
-      // Check if this is a directory import (no file extension)
+      // Get the directory of the current file to resolve relative paths correctly
+      const currentFileDir = dirname(filePath);
       const distPath = join(__dirname, '..', 'dist');
-      const fullImportPath = join(distPath, importPath);
+      const relativePath = filePath.replace(distPath, '').replace(/\\/g, '/');
+      const relativeDir = dirname(relativePath);
+      
+      // Construct the full path to check if it's a directory or file
+      let fullImportPath;
+      if (importPath.startsWith('./')) {
+        fullImportPath = join(currentFileDir, importPath);
+      } else if (importPath.startsWith('../')) {
+        fullImportPath = join(currentFileDir, importPath);
+      } else {
+        fullImportPath = join(currentFileDir, importPath);
+      }
       
       try {
         const stats = await stat(fullImportPath);
@@ -54,17 +66,20 @@ async function fixFileImports(filePath) {
           const newImport = `${prefix}${importPath}/index.js${suffix}`;
           content = content.substring(0, index) + newImport + content.substring(index + fullMatch.length);
           modified = true;
+          console.log(`Fixed directory import: ${importPath} -> ${importPath}/index.js in ${filePath}`);
         } else {
           // It's a file, append .js
           const newImport = `${prefix}${importPath}.js${suffix}`;
           content = content.substring(0, index) + newImport + content.substring(index + fullMatch.length);
           modified = true;
+          console.log(`Fixed file import: ${importPath} -> ${importPath}.js in ${filePath}`);
         }
       } catch (error) {
         // If we can't determine, assume it's a file and append .js
         const newImport = `${prefix}${importPath}.js${suffix}`;
         content = content.substring(0, index) + newImport + content.substring(index + fullMatch.length);
         modified = true;
+        console.log(`Assumed file import: ${importPath} -> ${importPath}.js in ${filePath}`);
       }
     }
     
