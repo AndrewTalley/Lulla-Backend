@@ -27,13 +27,14 @@ app.post("/", async (c) => {
   if (!parsed.success) return c.json({ error: "Invalid request" }, 400);
 
   let markdown: string | null = null;
-  let plan: any = null;
+  let plan: { id: string; markdown: string; babyAgeMonths: number | null; userId: string; createdAt: Date } | null = null;
 
   if (parsed.data.planId) {
-    plan = await db.query.plans.findFirst({
-      where: (p, { eq, and }) =>
+    const foundPlan = await db.query.plans.findFirst({
+      where: (p: any, { eq, and }: { eq: any; and: any }) =>
         and(eq(p.id, parsed.data.planId!), eq(p.userId, user.id)),
     });
+    plan = foundPlan || null;
     if (!plan) return c.json({ error: "Plan not found" }, 404);
     markdown = plan.markdown;
   } else if (parsed.data.schedule) {
