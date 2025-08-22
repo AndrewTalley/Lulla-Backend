@@ -3,7 +3,6 @@ import { getCookie } from "hono/cookie";
 import { db } from "../db";
 import { eq } from "drizzle-orm";
 import { users } from "../db/schema";
-import type { User } from "../types";
 
 export const authMiddleware: MiddlewareHandler = async (c, next) => {
   const session = getCookie(c, "session");

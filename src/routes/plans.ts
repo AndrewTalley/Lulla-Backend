@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import { authMiddleware } from "../middleware/auth";
 import { db } from "../db";
 import { plans, users } from "../db/schema";
-import { desc, eq } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { nanoid } from "nanoid";
 import type { Variables } from "../types";
 
@@ -15,7 +15,7 @@ plan.post("/", async (c) => {
   const user = c.get("user");
   const { markdown, ageMonths } = await c.req.json();
   const id = nanoid();
-  const createdAt = new Date().toISOString();
+  const createdAt = new Date();
 
   await db.insert(plans).values({
     id,

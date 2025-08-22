@@ -1,4 +1,4 @@
-import { Context, Next } from "hono";
+import type { Context, Next } from "hono";
 import { db } from "../db";
 import { users } from "../db/schema";
 import { eq } from "drizzle-orm";
@@ -33,7 +33,17 @@ export const requireAccessLevel = (requiredLevel: 'basic' | 'premium') => {
       }
 
       // Add user data to context for use in routes
-      c.set("currentUser", currentUser);
+      // Convert database user to User type
+      const userForContext = {
+        ...currentUser,
+        isPremium: currentUser.isPremium ?? 0,
+        exportCredits: currentUser.exportCredits ?? 0,
+        createdAt: currentUser.createdAt,
+        currentPeriodEnd: currentUser.currentPeriodEnd,
+        subscriptionTier: currentUser.subscriptionTier ?? 'free',
+        subscriptionStatus: currentUser.subscriptionStatus ?? 'inactive'
+      };
+      c.set("currentUser", userForContext);
       await next();
     } catch (error) {
       console.error("Access control error:", error);

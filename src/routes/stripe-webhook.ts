@@ -62,7 +62,7 @@ app.post("/", async (c) => {
         const tier = SUBSCRIPTION_TIERS[priceId as keyof typeof SUBSCRIPTION_TIERS];
         
         if (tier) {
-          const result = await db
+          await db
             .update(users)
             .set({
               isPremium: tier.name === 'premium' ? 1 : 0, // Only premium users get isPremium=1
@@ -83,7 +83,7 @@ app.post("/", async (c) => {
           if (fallbackTier && (fallbackTier === 'basic' || fallbackTier === 'premium')) {
             const fallbackCredits = fallbackTier === 'basic' ? 10 : 50;
             
-                         const result = await db
+                         await db
                .update(users)
                .set({
                  isPremium: fallbackTier === 'premium' ? 1 : 0, // Only premium users get isPremium=1
