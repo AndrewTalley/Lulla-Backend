@@ -1,0 +1,44 @@
+{
+  "name": "sleep-schedule-backend",
+  "version": "1.0.0",
+  "description": "AI Sleep Schedule Builder Backend API",
+  "main": "src/index.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "start": "tsx src/index.ts",
+    "build": "tsc",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.16.0",
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.5",
+    "date-fns": "^4.1.0",
+    "dotenv": "^17.2.0",
+    "drizzle-orm": "^0.44.3",
+    "hono": "^4.8.5",
+    "nanoid": "^5.1.5",
+    "nodemailer": "^7.0.5",
+    "openai": "^5.10.1",
+    "pdf-lib": "^1.17.1",
+    "pg": "^8.16.3",
+    "stripe": "^18.3.0",
+    "uuid": "^11.1.0",
+    "zod": "^4.0.5"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/nodemailer": "^6.4.17",
+    "@types/pg": "^8.15.4",
+    "tsx": "^4.19.2",
+    "typescript": "^5.8.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": ["sleep", "schedule", "ai", "api", "backend"],
+  "author": "",
+  "license": "MIT"
+}
