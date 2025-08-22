@@ -3,10 +3,11 @@
   "version": "1.0.0",
   "description": "AI Sleep Schedule Builder Backend API",
   "main": "src/index.ts",
+  "type": "module",
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "start": "node dist/index.js",
-    "build": "tsc",
+    "build": "tsc && node scripts/fix-imports.js",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
