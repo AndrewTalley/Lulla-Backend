@@ -13,14 +13,14 @@ plan.use("*", authMiddleware);
 // POST /plans --> Save a new plan
 plan.post("/", async (c) => {
   const user = c.get("user");
-  const { markdown, ageMonths } = await c.req.json();
+  const { schedule, ageMonths } = await c.req.json();
   const id = nanoid();
   const createdAt = new Date();
 
   await db.insert(plans).values({
     id,
     userId: user.id,
-    markdown,
+    markdown: schedule,
     babyAgeMonths: ageMonths,
     createdAt,
   });
